@@ -75,18 +75,26 @@ function isReportSafe(report, dampenerActive = true) {
             (!levelsIncreasing && current > previous)
         ) {
             if (dampenerActive) {
-                const reportWithOneLevelRemoved = report.slice();
-                reportWithOneLevelRemoved.splice(i, 1);
-                console.log(
-                    `report was ${report}; now is ${reportWithOneLevelRemoved}`,
-                );
-                return isReportSafe(reportWithOneLevelRemoved, false);
+                const modifiedReport = removeFromArrayAtIndex(report, i);
+                console.log(`report was ${report}; now is ${modifiedReport}`);
+                return isReportSafe(modifiedReport, false);
             } else {
                 return false;
             }
         }
     }
     return true;
+}
+
+/**
+ * Returns a copy of array with the element at index removed.
+ *
+ * @param {Array.<any>} array The array to be copied.
+ * @param {number} index  The index of array to remove an element from.
+ * @returns {Array.<any} A copy of array without the element at index.
+ */
+function removeFromArrayAtIndex(array, index) {
+    return array.slice(0, index).concat(array.slice(index + 1));
 }
 
 main();
