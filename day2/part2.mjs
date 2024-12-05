@@ -35,15 +35,28 @@ function main() {
         }
     }
 
-    // 587 is too low
+    isReportSafe([7, 6, 4, 2, 1]);
+    isReportSafe([1, 2, 7, 8, 9]);
+    isReportSafe([9, 7, 6, 2, 1]);
+    isReportSafe([1, 3, 2, 4, 5]);
+    isReportSafe([8, 6, 4, 4, 1]);
+    isReportSafe([1, 3, 6, 7, 9]);
+
+    // 577 is too low
     console.log(count);
 }
 
 /**
- * Returns true if the report is considered safe.
+ * Returns true if the report is considered safe. A report is safe if the
+ * levels are either all increasing or all decreasing and any two adjacent
+ * levels differ by at least one and at most three. If the Problem Dampener
+ * is active, then one single violation of the above criteria is tolerated
+ * without making the report unsafe.
  *
- * @param {Array.<number>} report The report to be examined.
- * @param {boolean} [dampenerActive=true] Determines whether the Problem Dampener is active
+ * @param {Array.<number>} report The report to be examined, containing one
+ *     number for each level.
+ * @param {boolean} [dampenerActive=true] Determines whether the Problem
+ *     Dampener is active
  * @returns {boolean} True if the report is considered safe.
  */
 function isReportSafe(report, dampenerActive = true) {
@@ -62,7 +75,12 @@ function isReportSafe(report, dampenerActive = true) {
             (!levelsIncreasing && current > previous)
         ) {
             if (dampenerActive) {
-                return isReportSafe(report.slice().splice(i, 1), false);
+                const reportWithOneLevelRemoved = report.slice();
+                reportWithOneLevelRemoved.splice(i, 1);
+                console.log(
+                    `report was ${report}; now is ${reportWithOneLevelRemoved}`,
+                );
+                return isReportSafe(reportWithOneLevelRemoved, false);
             } else {
                 return false;
             }
