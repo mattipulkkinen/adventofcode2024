@@ -28,9 +28,7 @@ function main() {
 
     let count = 0;
     for (let line of input_file_lines) {
-        const levels = line
-            .split(/\s+/)
-            .map(n => Number(n));
+        const levels = line.split(/\s+/).map((n) => Number(n));
 
         if (isReportSafe(levels)) {
             count++;
@@ -57,10 +55,12 @@ function isReportSafe(report, dampenerActive = true) {
         let previous = report[i - 1];
 
         let difference = Math.abs(current - previous);
-        if (current === previous
-            || difference > GREATEST_ALLOWED_DIFFERENCE
-            || levelsIncreasing && current < previous
-            || !levelsIncreasing && current > previous) {
+        if (
+            current === previous ||
+            difference > GREATEST_ALLOWED_DIFFERENCE ||
+            (levelsIncreasing && current < previous) ||
+            (!levelsIncreasing && current > previous)
+        ) {
             if (dampenerActive) {
                 return isReportSafe(report.slice().splice(i, 1), false);
             } else {

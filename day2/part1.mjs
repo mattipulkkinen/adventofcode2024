@@ -26,8 +26,10 @@ function main() {
         .trim()
         .split("\n");
 
-    const count = input_file_lines
-        .reduce((acc, line) => acc + (isReportSafe(line) ? 1 : 0), 0);
+    const count = input_file_lines.reduce(
+        (acc, line) => acc + (isReportSafe(line) ? 1 : 0),
+        0,
+    );
 
     console.log(count);
 }
@@ -39,9 +41,7 @@ function main() {
  * @returns {boolean} True if the report is considered safe.
  */
 function isReportSafe(report) {
-    const levels = report
-        .split(/\s+/)
-        .map(n => Number(n));
+    const levels = report.split(/\s+/).map((n) => Number(n));
     const GREATEST_ALLOWED_DIFFERENCE = 3;
     const levelsIncreasing = levels[1] > levels[0];
 
@@ -50,10 +50,12 @@ function isReportSafe(report) {
         let previous = levels[i - 1];
 
         let difference = Math.abs(current - previous);
-        if (current === previous
-            || difference > GREATEST_ALLOWED_DIFFERENCE
-            || levelsIncreasing && current < previous
-            || !levelsIncreasing && current > previous) {
+        if (
+            current === previous ||
+            difference > GREATEST_ALLOWED_DIFFERENCE ||
+            (levelsIncreasing && current < previous) ||
+            (!levelsIncreasing && current > previous)
+        ) {
             return false;
         }
     }
