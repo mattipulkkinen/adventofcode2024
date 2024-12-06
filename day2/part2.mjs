@@ -87,11 +87,11 @@ function isReportSafe(report, dampenerActive = true) {
 }
 
 /**
- * Returns a copy of array with the element at index removed.
+ * Returns a copy of `array` with the element at `index` removed.
  *
  * @param {Array.<any>} array The array to be copied.
  * @param {number} index  The index of array to remove an element from.
- * @returns {Array.<any} A copy of array without the element at index.
+ * @returns {Array.<any} A copy of `array` without the element at `index`.
  */
 function removeFromArrayAtIndex(array, index) {
     return array.slice(0, index).concat(array.slice(index + 1));
