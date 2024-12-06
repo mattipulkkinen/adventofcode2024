@@ -21,19 +21,16 @@ import fs from "node:fs";
 
 function main() {
     const INPUT_FILENAME = "input.txt";
-    const input_file_lines = fs
+    const reports = fs
         .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
         .trim()
-        .split("\n");
+        .split("\n")
+        .map((line) => line.split(/\s+/).map((n) => Number(n)));
 
-    let count = 0;
-    for (let line of input_file_lines) {
-        const levels = line.split(/\s+/).map((n) => Number(n));
-
-        if (isReportSafe(levels)) {
-            count++;
-        }
-    }
+    const count = reports.reduce(
+        (acc, report) => acc + (isReportSafe(report) ? 1 : 0),
+        0,
+    );
 
     isReportSafe([7, 6, 4, 2, 1]);
     isReportSafe([1, 2, 7, 8, 9]);
