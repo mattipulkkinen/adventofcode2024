@@ -32,7 +32,6 @@ function main() {
         0,
     );
 
-    // 589 is the right answer
     console.log(count);
 }
 
@@ -68,14 +67,9 @@ function isReportSafe(report, dampenerActive = true) {
                 return false;
             }
 
-            let modifiedReports = [];
-            for (let [k, _] of report.entries()) {
-                modifiedReports.push(removeFromArrayAtIndex(report, k));
-            }
-
-            return modifiedReports.some((modifiedReport) =>
-                isReportSafe(modifiedReport, false),
-            );
+            return report
+                .map((_, k) => removeFromArrayAtIndex(report, k))
+                .some((modifiedReport) => isReportSafe(modifiedReport, false));
         }
     }
 
