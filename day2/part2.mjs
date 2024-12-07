@@ -63,8 +63,8 @@ function isReportSafe(report, dampenerActive = true) {
     for (let i = 1; i < report.length; i++) {
         let current = report[i];
         let previous = report[i - 1];
-
         let difference = Math.abs(current - previous);
+
         if (
             current === previous ||
             difference > GREATEST_ALLOWED_DIFFERENCE ||
@@ -72,9 +72,14 @@ function isReportSafe(report, dampenerActive = true) {
             (!levelsIncreasing && current > previous)
         ) {
             if (dampenerActive) {
-                const modifiedReport = removeFromArrayAtIndex(report, i);
-                console.log(`report was ${report}; now is ${modifiedReport}`);
-                return isReportSafe(modifiedReport, false);
+                return (
+                    isReportSafe(
+                        removeFromArrayAtIndex(report, i - 1),
+                        false,
+                    ) ||
+                    isReportSafe(removeFromArrayAtIndex(report, i), false) ||
+                    isReportSafe(removeFromArrayAtIndex(report, i + 1), false)
+                );
             } else {
                 return false;
             }
