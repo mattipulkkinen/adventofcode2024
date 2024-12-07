@@ -20,7 +20,7 @@
 import fs from "node:fs";
 
 function main() {
-    const INPUT_FILENAME = "input.txt";
+    const INPUT_FILENAME = `${import.meta.dirname}/input.txt`;
     const reports = fs
         .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
         .trim()

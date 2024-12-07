@@ -20,11 +20,11 @@
 import fs from "node:fs";
 
 function main() {
-    const INPUT_FILE_NAME = "input.txt";
-    const input_file_lines = fs.
-        readFileSync(INPUT_FILE_NAME, { encoding: "utf8" })
+    const INPUT_FILE_NAME = `${import.meta.dirname}/input.txt`;
+    const input_file_lines = fs
+        .readFileSync(INPUT_FILE_NAME, { encoding: "utf8" })
         .trim()
-        .split("\n");;
+        .split("\n");
 
     const left = [];
     const right = [];
