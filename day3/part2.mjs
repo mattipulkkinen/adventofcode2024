@@ -28,8 +28,13 @@ function main() {
         .filter((value, index, originalArray) => {
             const dontIdx = originalArray.lastIndexOf("don't()", index);
             const doIdx = originalArray.indexOf("do()", index);
-            const result = dontIdx !== -1 && dontIdx < index && index < doIdx;
+            const result =
+                dontIdx !== -1 &&
+                dontIdx < doIdx &&
+                dontIdx < index &&
+                index < doIdx;
             console.log(value, index, dontIdx, doIdx, result);
+            return result;
         });
     //.map((operation) => operation.match(/\d+,\d+/))
     //.map((operands) => operands[0].split(",").map((n) => Number(n)))
