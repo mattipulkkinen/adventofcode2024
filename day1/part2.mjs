@@ -20,7 +20,7 @@
 import fs from "node:fs";
 
 function main() {
-    const INPUT_FILE_NAME = "input.txt";
+    const INPUT_FILE_NAME = `${import.meta.dirname}/input.txt`;
     const input_file_lines = fs
         .readFileSync(INPUT_FILE_NAME, { encoding: "utf8" })
         .trim()
@@ -34,8 +34,10 @@ function main() {
         right.push(Number(r));
     }
 
-    const similarityScore = left
-        .reduce((acc, n) => acc + n * countOccurrences(n, right), 0);
+    const similarityScore = left.reduce(
+        (acc, n) => acc + n * countOccurrences(n, right),
+        0,
+    );
 
     console.log(similarityScore);
 }
@@ -47,7 +49,7 @@ function main() {
  * @param {Array.<any>} array The array to count occurrences in.
  */
 function countOccurrences(elem, array) {
-    return array.reduce((acc, n) => acc + ((elem === n) ? 1 : 0), 0);
+    return array.reduce((acc, n) => acc + (elem === n ? 1 : 0), 0);
 }
 
 main();
