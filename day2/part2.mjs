@@ -32,14 +32,7 @@ function main() {
         0,
     );
 
-    isReportSafe([7, 6, 4, 2, 1]);
-    isReportSafe([1, 2, 7, 8, 9]);
-    isReportSafe([9, 7, 6, 2, 1]);
-    isReportSafe([1, 3, 2, 4, 5]);
-    isReportSafe([8, 6, 4, 4, 1]);
-    isReportSafe([1, 3, 6, 7, 9]);
-
-    // 577 is too low
+    // 589 is the right answer
     console.log(count);
 }
 
@@ -71,20 +64,21 @@ function isReportSafe(report, dampenerActive = true) {
             (levelsIncreasing && current < previous) ||
             (!levelsIncreasing && current > previous)
         ) {
-            if (dampenerActive) {
-                return (
-                    isReportSafe(
-                        removeFromArrayAtIndex(report, i - 1),
-                        false,
-                    ) ||
-                    isReportSafe(removeFromArrayAtIndex(report, i), false) ||
-                    isReportSafe(removeFromArrayAtIndex(report, i + 1), false)
-                );
-            } else {
+            if (!dampenerActive) {
                 return false;
             }
+
+            let modifiedReports = [];
+            for (let [k, _] of report.entries()) {
+                modifiedReports.push(removeFromArrayAtIndex(report, k));
+            }
+
+            return modifiedReports.some((modifiedReport) =>
+                isReportSafe(modifiedReport, false),
+            );
         }
     }
+
     return true;
 }
 
