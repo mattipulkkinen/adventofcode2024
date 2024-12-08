@@ -21,26 +21,24 @@ import fs from "node:fs";
 
 function main() {
     const INPUT_FILENAME = `${import.meta.dirname}/input.txt`;
-    const result = fs
+    const operations = fs
         .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
         .trim()
-        .match(/do\(\)|don't\(\)|mul\(\d+,\d+\)/g)
-        .filter((value, index, originalArray) => {
-            const dontIdx = originalArray.lastIndexOf("don't()", index);
-            const doIdx = originalArray.indexOf("do()", index);
-            const result =
-                dontIdx !== -1 &&
-                dontIdx < doIdx &&
-                dontIdx < index &&
-                index < doIdx;
-            console.log(value, index, dontIdx, doIdx, result);
-            return result;
-        });
-    //.map((operation) => operation.match(/\d+,\d+/))
-    //.map((operands) => operands[0].split(",").map((n) => Number(n)))
-    //.reduce((acc, [left, right]) => (acc += left * right), 0);
+        .match(/do\(\)|don't\(\)|mul\(\d+,\d+\)/g);
 
-    // 163151674 is too high
+    const multiplications = [];
+    let enabled = true;
+    for (const operation of operations) {
+        if (operation === "don't()") enabled = false;
+        else if (operation === "do()") enabled = true;
+        else if (enabled) multiplications.push(operation);
+    }
+
+    const result = multiplications
+        .map((operation) => operation.match(/\d+,\d+/))
+        .map((operands) => operands[0].split(",").map((n) => Number(n)))
+        .reduce((acc, [left, right]) => (acc += left * right), 0);
+
     console.log(result);
 }
 
