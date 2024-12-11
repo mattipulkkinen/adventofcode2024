@@ -21,21 +21,101 @@ import fs from "node:fs";
 
 function main() {
     const INPUT_FILENAME = `${import.meta.dirname}/input.txt`;
-    const input_lines = fs
-        .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
-        .trim()
-        .split("\n");
+    const input = new Input(
+        fs.readFileSync(INPUT_FILENAME, { encoding: "utf8" }),
+    );
 
-    const width = input_lines.at(0).length;
-    const height = input_lines.length;
-    console.log(width, height);
+    const result = countTotalXmases(input);
+    console.log(result);
+}
 
-    const row = 0;
-    const column = 0;
-    const all_on_one_line = input_lines.join("");
-    const c = all_on_one_line.at(row * width + column);
+/**
+ * Counts the total number of XMASes in the input.
+ * @param {Input} input The input
+ * @returns {number} The total number of XMASes in the input
+ */
+function countTotalXmases(input) {
+    let result = 0;
 
-    console.log(c);
+    for (let row = 0; row < input.width; row++) {
+        for (let column = 0; column < input.height; column++) {
+            const current_character = input.at(row, column);
+            if (current_character === "X") {
+                result += countSurroundingXmases(input, row, column);
+            }
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Counts the instances of the string "XMAS" in the input around the
+ * given coordinates, with the character at (row, column) assumed to be X.
+ *
+ * @param {Input} input The puzzle input
+ * @param {number} row The row where an X character was found
+ * @param {number} column The column where an X character was found
+ * @returns {number} The count of instances of the string XMAS around these
+ *     coordinates
+ */
+function countSurroundingXmases(input, row, column) {
+    let result = 0;
+
+    for (let rowDelta = -1; rowDelta <= 1; rowDelta++) {
+        for (let columnDelta = -1; columnDelta <= 1; columnDelta++) {
+            const currentRow = row + rowDelta;
+            const currentColumn = column + columnDelta;
+            if (
+                currentRow < 0 ||
+                input.width <= currentRow ||
+                currentColumn < 0 ||
+                input.height <= currentColumn
+            ) {
+                continue;
+            }
+        }
+    }
+
+    return result;
+}
+
+class Input {
+    /**
+     * @param {string} input The puzzle input
+     */
+    constructor(input) {
+        const input_lines = input.trim().split("\n");
+
+        /**
+         * The width of the input
+         * @type {number}
+         * @public
+         */
+        this.width = input_lines.at(0).length;
+        /**
+         * The height of the input
+         * @type {number}
+         * @public
+         */
+        this.height = input_lines.length;
+        /**
+         * The input itself
+         * @type {string}
+         * @public
+         */
+        this.input = input_lines.join("");
+    }
+
+    /**
+     * Returns the character at the given row and column of the input.
+     * @param {number} row The row
+     * @param {number} column The column
+     * @returns {string} The character at the given coordinates
+     */
+    at(row, column) {
+        return this.input.at(row * this.width + column);
+    }
 }
 
 main();
