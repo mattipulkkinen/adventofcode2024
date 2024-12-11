@@ -26,6 +26,7 @@ function main() {
     );
 
     const result = countTotalXmases(input);
+    // 2511 is too high
     console.log(result);
 }
 
@@ -64,19 +65,16 @@ function countSurroundingXmases(input, row, column) {
 
     for (let rowDelta = -1; rowDelta <= 1; rowDelta++) {
         for (let columnDelta = -1; columnDelta <= 1; columnDelta++) {
-            const currentRow = row + rowDelta;
-            const currentColumn = column + columnDelta;
             if (
-                currentRow < 0 ||
-                input.width <= currentRow ||
-                currentColumn < 0 ||
-                input.height <= currentColumn
+                input.at(row + rowDelta, column + columnDelta) === "M" &&
+                input.at(row + rowDelta * 2, column + columnDelta * 2) ===
+                    "A" &&
+                input.at(row + rowDelta * 3, column + columnDelta * 3) === "S"
             ) {
-                continue;
+                result += 1;
             }
         }
     }
-
     return result;
 }
 
