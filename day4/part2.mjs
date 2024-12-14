@@ -26,6 +26,8 @@ function main() {
     );
 
     const result = countTotalXmases(input);
+    // 920 is too low
+    // 1926 is too high
     console.log(result);
 }
 
@@ -39,7 +41,9 @@ function countTotalXmases(input) {
 
     for (let row = 0; row < input.width; row++) {
         for (let column = 0; column < input.height; column++) {
-            result += countSurroundingXmases(input, row, column);
+            if (hasSurroundingXmas(input, row, column)) {
+                result += 1;
+            }
         }
     }
 
@@ -47,39 +51,50 @@ function countTotalXmases(input) {
 }
 
 /**
- * Counts the instances of the string "XMAS" in the input around the
- * given coordinates.
- *
+ * Returns true if there is a X-MAS at the given coordinates. An X-MAS is two
+ * MAS strings arranged in a cross shape.
  * @param {Input} input The puzzle input
- * @param {number} row The row where an X character was found
- * @param {number} column The column where an X character was found
- * @returns {number} The count of instances of the string XMAS around these
- *     coordinates
+ * @param {number} row The row to check
+ * @param {number} column The column to check
+ * @returns {boolean} True if there is an X-MAS at the given coordinates
  */
-function countSurroundingXmases(input, row, column) {
-    let result = 0;
+function hasSurroundingXmas(input, row, column) {
+    const leadingDiagonal = `${input.at(row - 1, column - 1)}${input.at(row, column)}${input.at(row + 1, column + 1)}`;
+    const counterDiagonal = `${input.at(row + 1, column - 1)}${input.at(row, column)}${input.at(row - 1, column + 1)}`;
 
-    if (input.at(row, column) !== "X") {
-        return result;
+    console.log(
+        `(${row},${column})`,
+        `leading diagonal: ${leadingDiagonal}; counter diagonal: ${counterDiagonal}`,
+        `reverse leading diagonal: ${reverseString(leadingDiagonal)}; reverse counter diagonal: ${reverseString(counterDiagonal)}`,
+        (leadingDiagonal === "MAS" && counterDiagonal === "MAS") ||
+            (reverseString(leadingDiagonal) === "MAS" &&
+                reverseString(counterDiagonal) === "MAS") ||
+            (leadingDiagonal === "MAS" &&
+                reverseString(counterDiagonal) === "MAS") ||
+            (reverseString(leadingDiagonal) === "MAS" &&
+                counterDiagonal === "MAS"),
+    );
+
+    return (
+        (leadingDiagonal === "MAS" && counterDiagonal === "MAS") ||
+        (reverseString(leadingDiagonal) === "MAS" &&
+            reverseString(counterDiagonal) === "MAS") ||
+        (leadingDiagonal === "MAS" &&
+            reverseString(counterDiagonal) === "MAS") ||
+        (reverseString(leadingDiagonal) === "MAS" && counterDiagonal === "MAS")
+    );
+}
+
+/**
+ * Returns the reverse of the string s.
+ * @param {string} s The string to be reverse
+ * @returns {string} The string s in reverse
+ */
+function reverseString(s) {
+    let result = "";
+    for (let i = s.length - 1; 0 <= i; i--) {
+        result += s.at(i);
     }
-
-    // Cast a three-slot long ray into all the compass directions, starting
-    // from (row, column), and see if the ray covers the letters M, A, and S
-    // in that order. If they do, and assuming (row, column) is an X, we've
-    // found an XMAS and can increment our counter.
-    for (let rowDelta = -1; rowDelta <= 1; rowDelta++) {
-        for (let columnDelta = -1; columnDelta <= 1; columnDelta++) {
-            if (
-                input.at(row + rowDelta, column + columnDelta) === "M" &&
-                input.at(row + rowDelta * 2, column + columnDelta * 2) ===
-                    "A" &&
-                input.at(row + rowDelta * 3, column + columnDelta * 3) === "S"
-            ) {
-                result += 1;
-            }
-        }
-    }
-
     return result;
 }
 
