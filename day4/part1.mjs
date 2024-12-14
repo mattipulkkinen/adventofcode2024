@@ -40,10 +40,7 @@ function countTotalXmases(input) {
 
     for (let row = 0; row < input.width; row++) {
         for (let column = 0; column < input.height; column++) {
-            const current_character = input.at(row, column);
-            if (current_character === "X") {
-                result += countSurroundingXmases(input, row, column);
-            }
+            result += countSurroundingXmases(input, row, column);
         }
     }
 
@@ -52,7 +49,7 @@ function countTotalXmases(input) {
 
 /**
  * Counts the instances of the string "XMAS" in the input around the
- * given coordinates, with the character at (row, column) assumed to be X.
+ * given coordinates.
  *
  * @param {Input} input The puzzle input
  * @param {number} row The row where an X character was found
@@ -62,6 +59,8 @@ function countTotalXmases(input) {
  */
 function countSurroundingXmases(input, row, column) {
     let result = 0;
+
+    if (input.at(row, column) !== "X") return result;
 
     for (let rowDelta = -1; rowDelta <= 1; rowDelta++) {
         for (let columnDelta = -1; columnDelta <= 1; columnDelta++) {
@@ -75,6 +74,7 @@ function countSurroundingXmases(input, row, column) {
             }
         }
     }
+
     return result;
 }
 
