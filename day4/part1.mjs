@@ -26,7 +26,6 @@ function main() {
     );
 
     const result = countTotalXmases(input);
-    // 2483 is the right answer
     console.log(result);
 }
 
