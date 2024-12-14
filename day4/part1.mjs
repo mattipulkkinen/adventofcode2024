@@ -26,7 +26,7 @@ function main() {
     );
 
     const result = countTotalXmases(input);
-    // 2511 is too high
+    // 2483 is the right answer
     console.log(result);
 }
 
@@ -60,8 +60,14 @@ function countTotalXmases(input) {
 function countSurroundingXmases(input, row, column) {
     let result = 0;
 
-    if (input.at(row, column) !== "X") return result;
+    if (input.at(row, column) !== "X") {
+        return result;
+    }
 
+    // Cast a three-slot long ray into all the compass directions, starting
+    // from (row, column), and see if the ray covers the letters M, A, and S
+    // in that order. If they do, and assuming (row, column) is an X, we've
+    // found an XMAS and can increment our counter.
     for (let rowDelta = -1; rowDelta <= 1; rowDelta++) {
         for (let columnDelta = -1; columnDelta <= 1; columnDelta++) {
             if (
@@ -112,7 +118,16 @@ class Input {
      * @returns {string} The character at the given coordinates
      */
     at(row, column) {
-        return this.input.at(row * this.width + column);
+        if (
+            0 <= row &&
+            row <= this.height &&
+            0 <= column &&
+            column <= this.width
+        ) {
+            return this.input.at(row * this.width + column);
+        } else {
+            return null;
+        }
     }
 }
 
