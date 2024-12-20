@@ -26,8 +26,6 @@ function main() {
     );
 
     const result = countTotalXmases(input);
-    // 920 is too low
-    // 1926 is too high
     console.log(result);
 }
 
@@ -39,8 +37,8 @@ function main() {
 function countTotalXmases(input) {
     let result = 0;
 
-    for (let row = 0; row < input.width; row++) {
-        for (let column = 0; column < input.height; column++) {
+    for (let row = 0; row < input.height; row++) {
+        for (let column = 0; column < input.width; column++) {
             if (hasSurroundingXmas(input, row, column)) {
                 result += 1;
             }
@@ -62,40 +60,12 @@ function hasSurroundingXmas(input, row, column) {
     const leadingDiagonal = `${input.at(row - 1, column - 1)}${input.at(row, column)}${input.at(row + 1, column + 1)}`;
     const counterDiagonal = `${input.at(row + 1, column - 1)}${input.at(row, column)}${input.at(row - 1, column + 1)}`;
 
-    console.log(
-        `(${row},${column})`,
-        `leading diagonal: ${leadingDiagonal}; counter diagonal: ${counterDiagonal}`,
-        `reverse leading diagonal: ${reverseString(leadingDiagonal)}; reverse counter diagonal: ${reverseString(counterDiagonal)}`,
-        (leadingDiagonal === "MAS" && counterDiagonal === "MAS") ||
-            (reverseString(leadingDiagonal) === "MAS" &&
-                reverseString(counterDiagonal) === "MAS") ||
-            (leadingDiagonal === "MAS" &&
-                reverseString(counterDiagonal) === "MAS") ||
-            (reverseString(leadingDiagonal) === "MAS" &&
-                counterDiagonal === "MAS"),
-    );
-
     return (
         (leadingDiagonal === "MAS" && counterDiagonal === "MAS") ||
-        (reverseString(leadingDiagonal) === "MAS" &&
-            reverseString(counterDiagonal) === "MAS") ||
-        (leadingDiagonal === "MAS" &&
-            reverseString(counterDiagonal) === "MAS") ||
-        (reverseString(leadingDiagonal) === "MAS" && counterDiagonal === "MAS")
+        (leadingDiagonal === "SAM" && counterDiagonal === "SAM") ||
+        (leadingDiagonal === "MAS" && counterDiagonal === "SAM") ||
+        (leadingDiagonal === "SAM" && counterDiagonal === "MAS")
     );
-}
-
-/**
- * Returns the reverse of the string s.
- * @param {string} s The string to be reverse
- * @returns {string} The string s in reverse
- */
-function reverseString(s) {
-    let result = "";
-    for (let i = s.length - 1; 0 <= i; i--) {
-        result += s.at(i);
-    }
-    return result;
 }
 
 class Input {
@@ -134,9 +104,9 @@ class Input {
     at(row, column) {
         if (
             0 <= row &&
-            row <= this.height &&
+            row < this.height &&
             0 <= column &&
-            column <= this.width
+            column < this.width
         ) {
             return this.input.at(row * this.width + column);
         } else {
