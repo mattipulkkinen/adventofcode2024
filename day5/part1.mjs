@@ -25,9 +25,25 @@ function main() {
         .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
         .trim()
         .split("\n");
+    const orderingRules = [];
+    const updates = [];
+    let processingFirstSection = true;
     for (const line of input) {
-        console.log(line);
+        if (processingFirstSection) {
+            if (line === "") {
+                processingFirstSection = false;
+                continue;
+            }
+            orderingRules.push(line);
+        } else {
+            updates.push(line);
+        }
     }
+
+    console.log("Ordering rules:", orderingRules);
+    console.log("Updates:", updates);
+    console.log("Last rules:", orderingRules.at(orderingRules.length - 1));
+    console.log("Last update:", updates.at(updates.length - 1));
 }
 
 main();
