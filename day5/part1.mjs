@@ -25,7 +25,11 @@ function main() {
         .readFileSync(INPUT_FILENAME, { encoding: "utf8" })
         .trim()
         .split("\n");
-    const orderingRules = [];
+
+    // orderingRules is a map that, for a given page number n as the key,
+    // contains an array of all the page numbers that are supposed to come
+    // before n.
+    const orderingRules = new Map();
     const updates = [];
     let processingFirstSection = true;
     for (const line of input) {
@@ -34,16 +38,61 @@ function main() {
                 processingFirstSection = false;
                 continue;
             }
-            orderingRules.push(line);
+
+            let [comesBefore, comesAfter] = line
+                .split("|")
+                .map((n) => Number(n));
+
+            if (!orderingRules.has(comesAfter)) {
+                orderingRules.set(comesAfter, []);
+            }
+
+            orderingRules.get(comesAfter).push(comesBefore);
         } else {
-            updates.push(line);
+            updates.push(line.split(",").map((n) => Number(n)));
         }
     }
 
-    console.log("Ordering rules:", orderingRules);
-    console.log("Updates:", updates);
-    console.log("Last rules:", orderingRules.at(orderingRules.length - 1));
-    console.log("Last update:", updates.at(updates.length - 1));
+    const orderedUpdates = updates.filter((update) =>
+        isUpdateOrdered(orderingRules, update),
+    );
+
+    const result = orderedUpdates.reduce(
+        (sum, update) => sum + update.at(update.length / 2),
+        0,
+    );
+
+    console.log(result);
+}
+
+/**
+ * Checks if the given update is ordered according to the rules specified.
+ *
+ * @param {Map<number, number>} rules The ordering rules from the input.
+ * @param {Array<Number>} update A given update from the input.
+ * @returns {boolean} True if the update is ordered, false otherwise.
+ */
+function isUpdateOrdered(rules, update) {
+    for (let i = 0; i < update.length; i++) {
+        const pageNumber = update[i];
+
+        if (!rules.has(pageNumber)) {
+            return false;
+        }
+
+        const pageNumbersThatShouldComeBeforeThisOne = rules.get(pageNumber);
+
+        const updateTail = update.slice(i + 1);
+        if (
+            updateTail.some((n) =>
+                pageNumbersThatShouldComeBeforeThisOne.includes(n),
+            )
+        ) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 main();
