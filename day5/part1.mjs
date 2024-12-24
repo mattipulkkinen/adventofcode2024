@@ -68,7 +68,7 @@ function main() {
 /**
  * Checks if the given update is ordered according to the rules specified.
  *
- * @param {Map<number, number>} rules The ordering rules from the input.
+ * @param {Map<number, Array<number>>} rules The ordering rules from the input.
  * @param {Array<Number>} update A given update from the input.
  * @returns {boolean} True if the update is ordered, false otherwise.
  */
